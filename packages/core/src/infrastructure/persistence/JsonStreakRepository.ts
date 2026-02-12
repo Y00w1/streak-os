@@ -2,6 +2,14 @@ import type { StreakRepository } from '../../domain/ports/StreakRepository';
 import type { FileSystem } from '../../domain/ports/FileSystem';
 import type { Streak } from '../../domain/entities/Streak';
 import { serializeStreak, deserializeStreak } from '../../domain/entities/Streak';
+import {
+  STREAKS_FILE_NAME,
+  DATA_VERSION,
+  ERROR_PARSE_STREAKS_FILE,
+  ERROR_DESERIALIZE_STREAK_TEMPLATE,
+  PAYLOAD_KEY_STREAKS,
+  PAYLOAD_KEY_VERSION,
+} from './Constants';
 
 /**
  * JSON file-based implementation of StreakRepository.
@@ -14,7 +22,7 @@ export class JsonStreakRepository implements StreakRepository {
     private fileSystem: FileSystem,
     dataDirectory: string
   ) {
-    this.filePath = `${dataDirectory}/streaks.json`;
+    this.filePath = `${dataDirectory}/${STREAKS_FILE_NAME}`;
   }
 
   /**
@@ -37,13 +45,13 @@ export class JsonStreakRepository implements StreakRepository {
       const data = JSON.parse(content);
       const streaks = new Map<string, Streak>();
 
-      if (data && typeof data === 'object' && data.streaks) {
-        for (const [id, streakData] of Object.entries(data.streaks)) {
+      if (data && typeof data === 'object' && data[PAYLOAD_KEY_STREAKS]) {
+        for (const [id, streakData] of Object.entries(data[PAYLOAD_KEY_STREAKS])) {
           try {
             const streak = deserializeStreak(streakData as Record<string, unknown>);
             streaks.set(id, streak);
           } catch (err) {
-            console.error(`Failed to deserialize streak ${id}:`, err);
+            console.error(ERROR_DESERIALIZE_STREAK_TEMPLATE.replace('{id}', id), err);
           }
         }
       }
@@ -51,7 +59,7 @@ export class JsonStreakRepository implements StreakRepository {
       this.cache = streaks;
       return streaks;
     } catch (err) {
-      console.error('Failed to parse streaks file:', err);
+      console.error(ERROR_PARSE_STREAKS_FILE, err);
       this.cache = new Map();
       return this.cache;
     }
@@ -72,8 +80,8 @@ export class JsonStreakRepository implements StreakRepository {
     }
 
     const data = {
-      version: 1,
-      streaks,
+      [PAYLOAD_KEY_VERSION]: DATA_VERSION,
+      [PAYLOAD_KEY_STREAKS]: streaks,
     };
 
     const content = JSON.stringify(data, null, 2);

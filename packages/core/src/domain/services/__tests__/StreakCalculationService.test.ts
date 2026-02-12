@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { createStreak, addCompletion, addFreezeDay, resetStreak } from '../entities/Streak';
+import { createStreak, addCompletion, addFreezeDay, resetStreak } from '../../entities/Streak';
 import {
   calculateCurrentStreak,
   getStreakStatus,
   getLongestStreak,
-} from './StreakCalculationService';
-import { addDays, getDateKey, parseDate } from './date-utils';
+} from '../StreakCalculationService';
+import { addDays, getDateKey, parseDate } from '../DateUtils';
 
 describe('StreakCalculationService', () => {
   const testHabitId = 'test-habit-123';

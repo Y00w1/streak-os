@@ -1,6 +1,16 @@
 import { nanoid } from 'nanoid';
-import type { CompletionLog, FreezeDayLog } from './value-objects';
-import { getDateKey, isFutureDate, normalizeDate, parseDate } from '../services/date-utils';
+import type { CompletionLog, FreezeDayLog } from './ValueObjects';
+import { getDateKey, isFutureDate, normalizeDate, parseDate } from '../services/DateUtils';
+import {
+  ERROR_STREAK_HABIT_ID_EMPTY,
+  ERROR_FUTURE_COMPLETION,
+  ERROR_DUPLICATE_COMPLETION,
+  ERROR_DUPLICATE_FREEZE,
+  ERROR_STREAK_INVALID_ID,
+  ERROR_STREAK_INVALID_HABIT_ID,
+  ERROR_STREAK_INVALID_START_DATE,
+  ERROR_STREAK_INVALID_UPDATED_AT,
+} from '../Constants';
 
 /**
  * Streak entity represents a continuous chain of habit completions.
@@ -30,7 +40,7 @@ export function createStreak(
   startDate?: Date
 ): Streak {
   if (!habitId || habitId.trim().length === 0) {
-    throw new Error('Habit ID cannot be empty');
+    throw new Error(ERROR_STREAK_HABIT_ID_EMPTY);
   }
 
   const start = startDate ? normalizeDate(startDate) : new Date();
@@ -86,13 +96,13 @@ export function addCompletion(
   note?: string
 ): void {
   if (isFutureDate(date)) {
-    throw new Error('Cannot complete habit in the future');
+    throw new Error(ERROR_FUTURE_COMPLETION);
   }
 
   const dateKey = getDateKey(date);
 
   if (streak.completions.has(dateKey)) {
-    throw new Error(`Habit already completed on ${dateKey}`);
+    throw new Error(ERROR_DUPLICATE_COMPLETION);
   }
 
   const log: CompletionLog = note !== undefined
@@ -122,7 +132,7 @@ export function addFreezeDay(
   const dateKey = getDateKey(date);
 
   if (streak.freezeDays.has(dateKey)) {
-    throw new Error(`Freeze day already set for ${dateKey}`);
+    throw new Error(ERROR_DUPLICATE_FREEZE);
   }
 
   // Note: We're storing freeze days in a Set, so we lose the reason.
@@ -167,16 +177,16 @@ export function serializeStreak(streak: Streak): Record<string, unknown> {
  */
 export function deserializeStreak(data: Record<string, unknown>): Streak {
   if (typeof data.id !== 'string' || !data.id) {
-    throw new Error('Invalid streak: missing id');
+    throw new Error(ERROR_STREAK_INVALID_ID);
   }
   if (typeof data.habitId !== 'string' || !data.habitId) {
-    throw new Error('Invalid streak: missing habitId');
+    throw new Error(ERROR_STREAK_INVALID_HABIT_ID);
   }
   if (typeof data.startDate !== 'string' || !data.startDate) {
-    throw new Error('Invalid streak: missing startDate');
+    throw new Error(ERROR_STREAK_INVALID_START_DATE);
   }
   if (typeof data.updatedAt !== 'number') {
-    throw new Error('Invalid streak: missing updatedAt');
+    throw new Error(ERROR_STREAK_INVALID_UPDATED_AT);
   }
 
   const completionsArray = Array.isArray(data.completions) ? data.completions : [];

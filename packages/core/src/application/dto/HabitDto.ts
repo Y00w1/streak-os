@@ -4,7 +4,7 @@
 export interface HabitDto {
   id: string;
   name: string;
-  description?: string;
+  description?: string | undefined;
   createdAt: number;
   archived: boolean;
 }

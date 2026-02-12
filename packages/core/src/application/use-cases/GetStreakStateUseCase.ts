@@ -7,7 +7,7 @@ import {
   getLongestStreak,
 } from '../../domain/services/StreakCalculationService';
 import { getLastCompletionDate } from '../../domain/entities/Streak';
-import { getDateKey } from '../../domain/services/date-utils';
+import { getDateKey } from '../../domain/services/DateUtils';
 
 /**
  * Use case for retrieving the current state of a streak.

@@ -3,6 +3,8 @@
  * All functions use UTC normalization to avoid timezone issues.
  */
 
+import { DATE_KEY_FORMAT, MILLISECONDS_PER_DAY, DATE_PARTS_EXPECTED_COUNT, ERROR_INVALID_DATE_KEY_TEMPLATE } from '../Constants';
+
 /**
  * Converts a Date to a normalized date key (YYYY-MM-DD format).
  * Uses UTC to avoid timezone issues.
@@ -25,7 +27,8 @@ export function parseDate(key: string): Date {
   const day = parts[2];
   
   if (year === undefined || month === undefined || day === undefined) {
-    throw new Error(`Invalid date key: ${key}`);
+    const errorMessage = ERROR_INVALID_DATE_KEY_TEMPLATE.replace('{key}', key);
+    throw new Error(errorMessage);
   }
   
   return new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0));
@@ -55,7 +58,7 @@ export function getDaysBetween(start: Date, end: Date): number {
   const startDate = parseDate(startKey);
   const endDate = parseDate(endKey);
   const diffMs = endDate.getTime() - startDate.getTime();
-  return Math.round(diffMs / (1000 * 60 * 60 * 24));
+  return Math.round(diffMs / MILLISECONDS_PER_DAY);
 }
 
 /**

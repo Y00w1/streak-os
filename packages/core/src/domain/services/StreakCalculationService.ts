@@ -1,6 +1,6 @@
 import type { Streak } from '../entities/Streak';
-import type { StreakStatus } from '../entities/value-objects';
-import { addDays, getDateKey, getDaysBetween, parseDate } from './date-utils';
+import type { StreakStatus } from '../entities/ValueObjects';
+import { addDays, getDateKey, getDaysBetween, parseDate } from './DateUtils';
 
 /**
  * Service for calculating streak metrics and status.

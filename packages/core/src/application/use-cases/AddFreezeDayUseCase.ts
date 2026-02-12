@@ -1,7 +1,7 @@
 import { StreakRepository } from '../../domain/ports/StreakRepository';
 import { addFreezeDay } from '../../domain/entities/Streak';
 import { AddFreezeDayDto } from '../dto/AddFreezeDayDto';
-import { parseDate } from '../../domain/services/date-utils';
+import { parseDate } from '../../domain/services/DateUtils';
 
 /**
  * Use case for adding a freeze day to a streak.

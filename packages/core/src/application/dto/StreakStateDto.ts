@@ -1,4 +1,4 @@
-import type { StreakStatus } from '../../domain/entities/value-objects';
+import type { StreakStatus } from '../../domain/entities/ValueObjects';
 
 /**
  * DTO representing the complete state of a streak for UI consumption.

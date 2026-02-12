@@ -19,7 +19,7 @@ export type { AddFreezeDayDto } from './application/dto/AddFreezeDayDto';
 // Domain Entities
 export type { Habit } from './domain/entities/Habit';
 export type { Streak } from './domain/entities/Streak';
-export type { StreakStatus, CompletionLog, FreezeDayLog } from './domain/entities/value-objects';
+export type { StreakStatus, CompletionLog, FreezeDayLog } from './domain/entities/ValueObjects';
 
 // Repository Ports (for dependency injection)
 export type { HabitRepository } from './domain/ports/HabitRepository';
@@ -44,4 +44,4 @@ export {
   isToday,
   getDaysBetween,
   addDays,
-} from './domain/services/date-utils';
+} from './domain/services/DateUtils';

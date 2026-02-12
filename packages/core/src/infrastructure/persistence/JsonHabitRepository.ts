@@ -2,6 +2,14 @@ import type { HabitRepository } from '../../domain/ports/HabitRepository';
 import type { FileSystem } from '../../domain/ports/FileSystem';
 import type { Habit } from '../../domain/entities/Habit';
 import { serializeHabit, deserializeHabit } from '../../domain/entities/Habit';
+import {
+  HABITS_FILE_NAME,
+  DATA_VERSION,
+  ERROR_PARSE_HABITS_FILE,
+  ERROR_DESERIALIZE_HABIT_TEMPLATE,
+  PAYLOAD_KEY_HABITS,
+  PAYLOAD_KEY_VERSION,
+} from './Constants';
 
 /**
  * JSON file-based implementation of HabitRepository.
@@ -14,7 +22,7 @@ export class JsonHabitRepository implements HabitRepository {
     private fileSystem: FileSystem,
     dataDirectory: string
   ) {
-    this.filePath = `${dataDirectory}/habits.json`;
+    this.filePath = `${dataDirectory}/${HABITS_FILE_NAME}`;
   }
 
   /**
@@ -37,13 +45,13 @@ export class JsonHabitRepository implements HabitRepository {
       const data = JSON.parse(content);
       const habits = new Map<string, Habit>();
 
-      if (data && typeof data === 'object' && data.habits) {
-        for (const [id, habitData] of Object.entries(data.habits)) {
+      if (data && typeof data === 'object' && data[PAYLOAD_KEY_HABITS]) {
+        for (const [id, habitData] of Object.entries(data[PAYLOAD_KEY_HABITS])) {
           try {
             const habit = deserializeHabit(habitData as Record<string, unknown>);
             habits.set(id, habit);
           } catch (err) {
-            console.error(`Failed to deserialize habit ${id}:`, err);
+            console.error(ERROR_DESERIALIZE_HABIT_TEMPLATE.replace('{id}', id), err);
           }
         }
       }
@@ -51,7 +59,7 @@ export class JsonHabitRepository implements HabitRepository {
       this.cache = habits;
       return habits;
     } catch (err) {
-      console.error('Failed to parse habits file:', err);
+      console.error(ERROR_PARSE_HABITS_FILE, err);
       this.cache = new Map();
       return this.cache;
     }
@@ -72,8 +80,8 @@ export class JsonHabitRepository implements HabitRepository {
     }
 
     const data = {
-      version: 1,
-      habits,
+      [PAYLOAD_KEY_VERSION]: DATA_VERSION,
+      [PAYLOAD_KEY_HABITS]: habits,
     };
 
     const content = JSON.stringify(data, null, 2);

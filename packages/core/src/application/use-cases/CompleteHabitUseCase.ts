@@ -2,7 +2,7 @@ import { HabitRepository } from '../../domain/ports/HabitRepository';
 import { StreakRepository } from '../../domain/ports/StreakRepository';
 import { addCompletion } from '../../domain/entities/Streak';
 import { CompleteHabitDto } from '../dto/CompleteHabitDto';
-import { parseDate, getDateKey } from '../../domain/services/date-utils';
+import { parseDate, getDateKey } from '../../domain/services/DateUtils';
 import { calculateCurrentStreak } from '../../domain/services/StreakCalculationService';
 
 /**

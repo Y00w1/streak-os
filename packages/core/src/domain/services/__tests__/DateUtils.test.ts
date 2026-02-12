@@ -9,9 +9,9 @@ import {
   getYesterday,
   isFutureDate,
   normalizeDate,
-} from './date-utils';
+} from '../DateUtils';
 
-describe('date-utils', () => {
+describe('DateUtils', () => {
   describe('getDateKey', () => {
     it('should format date as YYYY-MM-DD', () => {
       const date = new Date(Date.UTC(2026, 1, 11, 15, 30, 0)); // Feb 11, 2026, 3:30 PM UTC

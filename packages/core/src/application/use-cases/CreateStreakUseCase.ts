@@ -2,7 +2,7 @@ import { HabitRepository } from '../../domain/ports/HabitRepository';
 import { StreakRepository } from '../../domain/ports/StreakRepository';
 import { createStreak } from '../../domain/entities/Streak';
 import { CreateStreakDto } from '../dto/CreateStreakDto';
-import { parseDate } from '../../domain/services/date-utils';
+import { parseDate } from '../../domain/services/DateUtils';
 
 /**
  * Use case for creating a new streak for a habit.

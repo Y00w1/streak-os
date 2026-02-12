@@ -1,4 +1,11 @@
 import { nanoid } from 'nanoid';
+import {
+  ERROR_HABIT_NAME_EMPTY,
+  ERROR_HABIT_INVALID_ID,
+  ERROR_HABIT_INVALID_NAME,
+  ERROR_HABIT_INVALID_CREATED_AT,
+  ERROR_HABIT_INVALID_ARCHIVED,
+} from '../Constants';
 
 /**
  * Habit entity represents a trackable activity or behavior.
@@ -24,7 +31,7 @@ export function createHabit(
   description?: string
 ): Habit {
   if (!name || name.trim().length === 0) {
-    throw new Error('Habit name cannot be empty');
+    throw new Error(ERROR_HABIT_NAME_EMPTY);
   }
 
   const habit: Habit = {
@@ -53,13 +60,13 @@ export function serializeHabit(habit: Habit): Record<string, unknown> {
  */
 export function deserializeHabit(data: Record<string, unknown>): Habit {
   if (typeof data.id !== 'string' || !data.id) {
-    throw new Error('Invalid habit: missing id');
+    throw new Error(ERROR_HABIT_INVALID_ID);
   }
   if (typeof data.name !== 'string' || !data.name) {
-    throw new Error('Invalid habit: missing name');
+    throw new Error(ERROR_HABIT_INVALID_NAME);
   }
   if (typeof data.createdAt !== 'number') {
-    throw new Error('Invalid habit: missing createdAt');
+    throw new Error(ERROR_HABIT_INVALID_CREATED_AT);
   }
 
   const habit: Habit = {
