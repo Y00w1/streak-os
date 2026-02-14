@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { StreakStateDto } from '@streak-os/core';
 import { streakService } from './services/streakService';
+import { sendNotification } from './lib/notifications';
 import './App.css';
 
 function App() {
@@ -139,6 +140,14 @@ function App() {
               className="btn-secondary"
             >
               Reset Streak
+            </button>
+
+            <button 
+              onClick={() => sendNotification('STREAK-OS', 'Reminder: maintain your streak today.')}
+              disabled={loading}
+              className="btn-secondary"
+            >
+              Test Notification
             </button>
           </div>
 
